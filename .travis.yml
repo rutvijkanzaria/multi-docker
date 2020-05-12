@@ -1,0 +1,21 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t rutvijkanzaria/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true rutvijkanzaria/react-test yarn test
+
+after_success:
+    - docker build -t rutvijkanzaria/multi-client ./client
+    - docker build -t rutvijkanzaria/multi-nginx ./nginx
+    - docker build -t rutvijkanzaria/multi-server ./server
+    - docker build -t rutvijkanzaria/multi-worker ./worker
+
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker push rutvijkanzaria/multi-client
+    - docker push rutvijkanzaria/multi-nginx
+    - docker push rutvijkanzaria/multi-server
+    - docker push rutvijkanzaria/multi-worker
