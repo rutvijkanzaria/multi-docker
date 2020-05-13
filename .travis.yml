@@ -23,7 +23,7 @@ after_success:
 deploy:
     edge: true
     provider: elasticbeanstalk
-    region: ap-south-1
+    region: "ap-south-1"
     app: "multi-docker"
     env: "MultiDocker-env"
     bucker_name: "elasticbeanstalk-ap-south-1-619627729833"
